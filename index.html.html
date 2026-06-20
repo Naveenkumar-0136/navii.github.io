@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naveenkumar V — UI/UX Designer</title>
+<meta name="description" content="Portfolio of Naveenkumar V, UI/UX Designer — wireframes, prototypes and front-end builds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ====================== DESIGN TOKENS ====================== */
+  :root{
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --radius-s:3px;
+    --radius-m:6px;
+    --maxw:1120px;
+    --dur:.45s;
+  }
+  html[data-theme="paper"]{
+    --bg:#F6F4EF;
+    --bg-alt:#ECE7DC;
+    --card:#FFFEFB;
+    --ink:#1B2A41;
+    --ink-soft:#5B6B7C;
+    --accent:#D97D1F;
+    --accent-ink:#3A2305;
+    --line:#D8D2C3;
+    --blueprint:#335C81;
+    --blueprint-soft:#9FB6CC;
+    --shadow:0 1px 0 rgba(27,42,65,.06);
+  }
+  html[data-theme="blueprint"]{
+    --bg:#13304E;
+    --bg-alt:#1B3D60;
+    --card:#1C4066;
+    --ink:#EAF1F8;
+    --ink-soft:#9FB9D2;
+    --accent:#F4B544;
+    --accent-ink:#2A1B00;
+    --line:rgba(234,241,248,.18);
+    --blueprint:#BFD7EC;
+    --blueprint-soft:#6E93B6;
+    --shadow:0 1px 0 rgba(0,0,0,.2);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    transition:background var(--dur) ease, color var(--dur) ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:var(--font-display);
+    color:var(--ink);
+    margin:0;
+    letter-spacing:-.01em;
+  }
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  ul,ol{margin:0;padding:0;list-style:none;}
+  .mono{font-family:var(--font-mono);}
+  img,svg{display:block;max-width:100%;}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--blueprint);
+    margin-bottom:.9rem;
+    display:block;
+  }
+
+  /* ====================== LAYOUT HELPERS ====================== */
+  .sheet{
+    padding:5.5rem 1.5rem;
+    border-bottom:1px solid var(--line);
+    transition:background var(--dur) ease, border-color var(--dur) ease;
+  }
+  .sheet--alt{background:var(--bg-alt);}
+  .sheet__inner{max-width:var(--maxw);margin:0 auto;}
+  .sheet__inner--split{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:3rem;
+    align-items:start;
+  }
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+
+  /* ====================== TOPBAR ====================== */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    transition:background var(--dur) ease, border-color var(--dur) ease;
+  }
+  .topbar__inner{
+    max-width:var(--maxw);margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.9rem 1.5rem;gap:1.5rem;
+  }
+  .topbar__brand{
+    font-family:var(--font-display);font-weight:700;font-size:1rem;
+    display:flex;flex-direction:column;line-height:1.15;white-space:nowrap;
+  }
+  .topbar__brand span{
+    font-family:var(--font-mono);font-weight:400;font-size:.66rem;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .topbar__nav{
+    display:flex;gap:1.4rem;overflow-x:auto;scrollbar-width:none;
+    font-family:var(--font-mono);font-size:.74rem;letter-spacing:.04em;
+  }
+  .topbar__nav::-webkit-scrollbar{display:none;}
+  .topbar__nav a{
+    color:var(--ink-soft);white-space:nowrap;padding:.3rem 0;border-bottom:2px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .topbar__nav a:hover,.topbar__nav a.is-active{color:var(--ink);border-color:var(--accent);}
+
+  .theme-toggle{
+    display:flex;align-items:center;gap:.5rem;background:none;border:0;cursor:pointer;
+    font-family:var(--font-mono);font-size:.7rem;color:var(--ink-soft);
+    letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+  }
+  .theme-toggle__track{
+    width:38px;height:20px;border-radius:999px;border:1px solid var(--blueprint);
+    position:relative;flex-shrink:0;transition:background var(--dur) ease;
+  }
+  .theme-toggle__thumb{
+    position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:var(--blueprint);transition:transform var(--dur) ease, background var(--dur) ease;
+  }
+  html[data-theme="blueprint"] .theme-toggle__thumb{transform:translateX(16px);background:var(--accent);}
+
+  /* ====================== BUTTONS ====================== */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:.75rem 1.4rem;border-radius:var(--radius-s);
+    font-family:var(--font-mono);font-size:.8rem;letter-spacing:.03em;
+    border:1px solid var(--ink);transition:transform .15s ease, background .2s ease, color .2s ease;
+  }
+  .btn--primary{background:var(--ink);color:var(--bg);}
+  .btn--primary:hover{transform:translateY(-2px);background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .btn--ghost{background:transparent;color:var(--ink);}
+  .btn--ghost:hover{transform:translateY(-2px);border-color:var(--accent);color:var(--accent);}
+
+  /* ====================== HERO ====================== */
+  .hero{
+    padding:6.5rem 1.5rem 5rem;
+    background-image:
+      linear-gradient(var(--bg) 0 0),
+      repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 48px);
+    background-blend-mode:normal;
+    opacity:1;
+    position:relative;
+    transition:background-color var(--dur) ease;
+  }
+  .hero__inner{max-width:var(--maxw);margin:0 auto;position:relative;}
+  .hero__name{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:700;}
+  .hero__role{
+    font-family:var(--font-mono);color:var(--blueprint);font-size:1rem;
+    letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem;
+  }
+  .hero__tagline{
+    font-size:1.15rem;color:var(--ink-soft);max-width:32rem;margin-top:1.3rem;
+  }
+  .hero__cta{display:flex;gap:1rem;margin-top:2.2rem;flex-wrap:wrap;}
+  .titleblock{
+    margin-top:3.5rem;border:1px solid var(--blueprint);border-radius:var(--radius-m);
+    display:grid;grid-template-columns:repeat(3,1fr);
+    background:var(--card);
+  }
+  .titleblock div{
+    padding:.9rem 1.2rem;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;gap:.25rem;
+  }
+  .titleblock div:last-child{border-right:0;}
+  .titleblock span{font-size:.66rem;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;}
+  .titleblock strong{font-weight:500;font-size:.88rem;}
+
+  /* ====================== ABOUT ====================== */
+  #about p{color:var(--ink-soft);max-width:34rem;}
+  #about h2{font-size:1.9rem;margin-bottom:1.1rem;}
+  .specsheet{
+    border:1px solid var(--line);border-radius:var(--radius-m);background:var(--card);
+    padding:1.4rem;
+  }
+  .specsheet h3{
+    font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:1rem;
+  }
+  .specsheet dl{display:flex;flex-direction:column;gap:.85rem;}
+  .specsheet dl > div{display:flex;flex-direction:column;gap:.2rem;border-top:1px dashed var(--line);padding-top:.7rem;}
+  .specsheet dl > div:first-child{border-top:0;padding-top:0;}
+  .specsheet dt{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blueprint);}
+  .specsheet dd{margin:0;font-size:.88rem;}
+
+  /* ====================== CAPABILITIES ====================== */
+  #capabilities h2{font-size:1.9rem;margin-bottom:2rem;}
+  .legend-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;
+  }
+  .legend-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
+    padding:1.3rem 1.2rem;transition:border-color .2s ease, transform .2s ease;
+  }
+  .legend-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .legend-card__index{color:var(--blueprint-soft);font-size:.78rem;margin-bottom:.6rem;}
+  .legend-card h3{font-size:1.02rem;margin-bottom:.55rem;}
+  .legend-card p{font-size:.83rem;color:var(--ink-soft);line-height:1.55;}
+
+  /* ====================== EXPERIENCE ====================== */
+  #experience h2{font-size:1.9rem;margin-bottom:1.8rem;}
+  .role-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
+    padding:1.8rem 1.9rem;
+  }
+  .role-card__head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1.2rem;}
+  .role-card__head h3{font-size:1.2rem;}
+  .role-card__meta{color:var(--ink-soft);font-size:.9rem;margin-top:.25rem;}
+  .role-card__duration{color:var(--blueprint);font-size:.78rem;letter-spacing:.06em;}
+  .role-card__list{display:flex;flex-direction:column;gap:.7rem;}
+  .role-card__list li{position:relative;padding-left:1.3rem;font-size:.93rem;color:var(--ink);}
+  .role-card__list li::before{
+    content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;
+    border:1px solid var(--accent);transform:rotate(45deg);
+  }
+
+  /* ====================== PROJECT ====================== */
+  #project h2{font-size:1.9rem;margin-bottom:1.8rem;}
+  .project{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+  .project__meta{color:var(--blueprint);font-family:var(--font-mono);font-size:.76rem;letter-spacing:.04em;margin:.4rem 0 1rem;}
+  .project__info h3{font-size:1.35rem;}
+  .project__info > p{color:var(--ink-soft);font-size:.95rem;max-width:30rem;}
+  .project__facts{display:flex;gap:2rem;margin:1.4rem 0 1.6rem;flex-wrap:wrap;}
+  .project__facts span{display:block;font-size:.66rem;letter-spacing:.1em;color:var(--blueprint-soft);text-transform:uppercase;margin-bottom:.3rem;}
+  .project__facts p{font-size:.86rem;}
+  .process{display:flex;flex-direction:column;gap:1rem;}
+  .process li{display:flex;gap:1rem;align-items:flex-start;}
+  .process__num{color:var(--blueprint-soft);font-size:.78rem;padding-top:.15rem;}
+  .process h4{font-size:.92rem;margin-bottom:.2rem;}
+  .process p{font-size:.83rem;color:var(--ink-soft);}
+
+  .project__diagram{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
+    padding:1.4rem;
+  }
+  .wireframe rect,.wireframe line,.wireframe circle{stroke:var(--blueprint);fill:none;}
+  .wireframe rect.solid{fill:var(--bg-alt);}
+  .wireframe .pin circle{fill:var(--accent);stroke:none;}
+  .wireframe .pin text{fill:var(--accent-ink);font-family:var(--font-mono);font-size:11px;font-weight:600;}
+  .wireframe .leader{stroke-dasharray:3 3;}
+  .wireframe text.label{fill:var(--ink-soft);font-family:var(--font-mono);font-size:9px;}
+  .project__caption{font-size:.74rem;color:var(--ink-soft);margin-top:.9rem;text-align:center;font-style:italic;}
+  .legend-key{display:flex;gap:1.2rem;justify-content:center;margin-top:.7rem;flex-wrap:wrap;font-size:.72rem;color:var(--ink-soft);}
+  .legend-key strong{color:var(--accent);margin-right:.3rem;}
+
+  /* ====================== CREDENTIALS ====================== */
+  #credentials h2{font-size:1.9rem;margin-bottom:1.1rem;}
+  .edu-block h3{font-size:1.15rem;}
+  .edu-block .role-card__meta{margin-bottom:.9rem;}
+  .edu-block p{color:var(--ink-soft);font-size:.9rem;max-width:32rem;margin-bottom:.6rem;}
+  .small-heading{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:1.5rem 0 .8rem;}
+  .small-heading:first-child{margin-top:0;}
+  .pill-row{display:flex;flex-wrap:wrap;gap:.6rem;}
+  .pill{
+    border:1px solid var(--blueprint);color:var(--ink);border-radius:999px;
+    padding:.4rem .9rem;font-size:.78rem;font-family:var(--font-mono);background:var(--card);
+  }
+
+  /* ====================== CONTACT ====================== */
+  #contact h2{font-size:1.9rem;margin-bottom:.7rem;}
+  #contact > .sheet__inner > p.lede{color:var(--ink-soft);max-width:30rem;margin-bottom:2.2rem;}
+  .contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:3rem;}
+  .contact-list{display:flex;flex-direction:column;gap:1rem;font-size:.92rem;}
+  .contact-list li{border-bottom:1px dashed var(--line);padding-bottom:.9rem;}
+  .contact-list a:hover{color:var(--accent);}
+  .contact-form{display:flex;flex-direction:column;gap:1.1rem;}
+  .contact-form label{display:flex;flex-direction:column;gap:.4rem;font-size:.78rem;letter-spacing:.04em;color:var(--ink-soft);font-family:var(--font-mono);text-transform:uppercase;}
+  .contact-form input,.contact-form textarea{
+    font-family:var(--font-body);font-size:.95rem;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-s);
+    padding:.7rem .8rem;resize:vertical;
+  }
+  .contact-form input:focus,.contact-form textarea:focus{border-color:var(--accent);}
+  .form-note{font-size:.76rem;color:var(--ink-soft);margin-top:-.2rem;}
+
+  /* ====================== FOOTER ====================== */
+  .footer{
+    text-align:center;padding:2rem 1.5rem;font-size:.76rem;color:var(--ink-soft);
+  }
+
+  /* ====================== RESPONSIVE ====================== */
+  @media (max-width:900px){
+    .sheet__inner--split{grid-template-columns:1fr;}
+    .legend-grid{grid-template-columns:repeat(2,1fr);}
+    .project{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    .titleblock{grid-template-columns:1fr;}
+    .titleblock div{border-right:0;border-bottom:1px solid var(--line);}
+    .titleblock div:last-child{border-bottom:0;}
+  }
+  @media (max-width:640px){
+    .topbar__inner{flex-wrap:wrap;row-gap:.5rem;}
+    .topbar__nav{order:3;width:100%;padding-top:.6rem;border-top:1px dashed var(--line);}
+  }
+  @media (max-width:560px){
+    .legend-grid{grid-template-columns:1fr;}
+    .sheet{padding:3.8rem 1.2rem;}
+    .hero{padding:4.5rem 1.2rem 3.5rem;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="topbar__brand" href="#top">NAVEENKUMAR V<span>UI/UX Designer</span></a>
+    <nav class="topbar__nav" aria-label="Section navigation">
+      <a href="#about">01 About</a>
+      <a href="#capabilities">02 Capabilities</a>
+      <a href="#experience">03 Experience</a>
+      <a href="#project">04 Project</a>
+      <a href="#credentials">05 Credentials</a>
+      <a href="#contact">06 Contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-pressed="false">
+      <span class="theme-toggle__label" id="themeLabel">Paper</span>
+      <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <span class="eyebrow">Portfolio — Index of 06 sheets</span>
+      <h1 class="hero__name">Naveenkumar V</h1>
+      <p class="hero__role">UI/UX Designer</p>
+      <p class="hero__tagline">Interfaces drafted with care — from the first wireframe to a working build.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#project">View My Work</a>
+        <a class="btn btn--ghost" href="#contact">Get in Touch</a>
+      </div>
+      <div class="titleblock mono">
+        <div><span>Location</span><strong>Tirupattur, Tamil Nadu</strong></div>
+        <div><span>Experience</span><strong>1 Year</strong></div>
+        <div><span>Status</span><strong>Open to Work</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="about">
+    <div class="sheet__inner sheet__inner--split">
+      <div class="reveal">
+        <span class="eyebrow">Sheet 01 / 06 — Profile</span>
+        <h2>About</h2>
+        <p>I'm a Computer Science graduate with one year of hands-on experience in UI/UX design. My process
+          usually starts with a rough wireframe and a clear user flow, then moves into interactive prototypes
+          in Figma once the structure feels right.</p>
+        <br>
+        <p>Alongside design, I have a working foundation in front-end and back-end development, so I think
+          about how a screen looks and how it actually gets built — not just one or the other.</p>
+      </div>
+      <aside class="specsheet mono reveal">
+        <h3>Quick Specs</h3>
+        <dl>
+          <div><dt>Education</dt><dd>B.Sc Computer Science · CGPA 6.81/10</dd></div>
+          <div><dt>Based in</dt><dd>Tirupattur, Tamil Nadu</dd></div>
+          <div><dt>Tools</dt><dd>Figma · Adobe XD · Canva</dd></div>
+          <div><dt>Languages</dt><dd>English · Tamil</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sheet sheet--alt" id="capabilities">
+    <div class="sheet__inner">
+      <span class="eyebrow">Sheet 02 / 06 — Legend</span>
+      <h2>Capabilities</h2>
+      <div class="legend-grid">
+        <article class="legend-card reveal">
+          <p class="legend-card__index mono">01 — UX</p>
+          <h3>UI/UX Design</h3>
+          <p>User Research, User Flows, Information Architecture, Wireframing (Low &amp; High Fidelity),
+            Interactive Prototyping, Usability Testing, Design Thinking, Responsive &amp; Mobile-Friendly Design.</p>
+        </article>
+        <article class="legend-card reveal">
+          <p class="legend-card__index mono">02 — DEV</p>
+          <h3>Web Development</h3>
+          <p>HTML, CSS, JavaScript, PHP, SQL — enough front-end and back-end fluency to build what I design.</p>
+        </article>
+        <article class="legend-card reveal">
+          <p class="legend-card__index mono">03 — KIT</p>
+          <h3>Design Tools</h3>
+          <p>Figma, Adobe XD, Canva, and Zignix — AP Solution's in-house UI/UX tool.</p>
+        </article>
+        <article class="legend-card reveal">
+          <p class="legend-card__index mono">04 — WAY</p>
+          <h3>Working Style</h3>
+          <p>Collaboration, Communication, Problem-Solving, Time Management, Adaptability.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="experience">
+    <div class="sheet__inner">
+      <span class="eyebrow">Sheet 03 / 06 — Record</span>
+      <h2>Experience</h2>
+      <div class="role-card reveal">
+        <div class="role-card__head">
+          <div>
+            <h3>UI/UX Design Intern</h3>
+            <p class="role-card__meta">AP Solution, Tirupathur</p>
+          </div>
+          <p class="role-card__duration mono">1 YEAR</p>
+        </div>
+        <ul class="role-card__list">
+          <li>Designed simple, user-friendly screens for web and app interfaces.</li>
+          <li>Created wireframes and prototypes using Figma to plan and validate screen layouts.</li>
+          <li>Built clickable prototypes to demonstrate application flow and functionality.</li>
+          <li>Collaborated with developers to ensure designs were implemented accurately.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet sheet--alt" id="project">
+    <div class="sheet__inner">
+      <span class="eyebrow">Sheet 04 / 06 — Case Study</span>
+      <h2>Featured Project</h2>
+      <div class="project">
+        <div class="project__info reveal">
+          <h3>Yoga Class Registration System</h3>
+          <p class="project__meta">WEB APPLICATION · 2022–2025</p>
+          <p>A web-based platform built for a yoga studio to handle class registration, schedule viewing, and
+            enrollment management, with real-time updates and admin control.</p>
+          <div class="project__facts">
+            <div><span>Role</span><p>UI/UX Design &amp; Full-Stack Build</p></div>
+            <div><span>Tools</span><p>HTML · CSS · JS · PHP · SQL</p></div>
+          </div>
+          <ol class="process">
+            <li><span class="process__num mono">01</span><div><h4>Plan</h4><p>Mapped the user flow for browsing classes, registering, and managing enrollments.</p></div></li>
+            <li><span class="process__num mono">02</span><div><h4>Wireframe</h4><p>Sketched low-fidelity layouts for the schedule, registration form, and admin view.</p></div></li>
+            <li><span class="process__num mono">03</span><div><h4>Build</h4><p>Developed the front end in HTML, CSS and JavaScript, and the back end in PHP with a SQL database.</p></div></li>
+            <li><span class="process__num mono">04</span><div><h4>Refine</h4><p>Walked through the flow end-to-end and adjusted the layout for clarity and ease of use.</p></div></li>
+          </ol>
+        </div>
+        <div class="project__diagram reveal">
+          <svg class="wireframe" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wireframe diagram of the class schedule and enrollment screen, with callouts for the schedule grid, the enroll button, and the admin controls.">
+            <rect x="16" y="16" width="448" height="328" rx="6"/>
+            <line x1="16" y1="52" x2="464" y2="52"/>
+            <circle cx="34" cy="34" r="4"/><circle cx="50" cy="34" r="4"/><circle cx="66" cy="34" r="4"/>
+            <rect x="92" y="27" width="200" height="14" rx="7" class="solid"/>
+            <rect x="392" y="24" width="56" height="20" rx="3"/>
+            <text x="420" y="38" text-anchor="middle" class="label">ADMIN</text>
+            <rect x="32" y="68" width="80" height="256"/>
+            <line x1="46" y1="92" x2="98" y2="92"/>
+            <line x1="46" y1="112" x2="98" y2="112"/>
+            <line x1="46" y1="132" x2="98" y2="132"/>
+            <line x1="46" y1="152" x2="86" y2="152"/>
+            <text x="46" y="84" class="label">MENU</text>
+            <text x="128" y="84" class="label">CLASS SCHEDULE</text>
+            <g>
+              <rect x="128" y="96" width="58" height="36" rx="3"/>
+              <rect x="192" y="96" width="58" height="36" rx="3" class="solid"/>
+              <rect x="256" y="96" width="58" height="36" rx="3"/>
+              <rect x="320" y="96" width="58" height="36" rx="3"/>
+              <rect x="384" y="96" width="58" height="36" rx="3"/>
+              <rect x="128" y="138" width="58" height="36" rx="3"/>
+              <rect x="192" y="138" width="58" height="36" rx="3"/>
+              <rect x="256" y="138" width="58" height="36" rx="3" class="solid"/>
+              <rect x="320" y="138" width="58" height="36" rx="3"/>
+              <rect x="384" y="138" width="58" height="36" rx="3"/>
+              <rect x="128" y="180" width="58" height="36" rx="3"/>
+              <rect x="192" y="180" width="58" height="36" rx="3"/>
+              <rect x="256" y="180" width="58" height="36" rx="3"/>
+              <rect x="320" y="180" width="58" height="36" rx="3" class="solid"/>
+              <rect x="384" y="180" width="58" height="36" rx="3"/>
+            </g>
+            <rect x="128" y="232" width="314" height="44" rx="3" class="solid"/>
+            <text x="138" y="258" class="label">SELECTED: HATHA YOGA · MON/WED/FRI 7:00 AM</text>
+            <rect x="368" y="290" width="74" height="30" rx="4" class="solid"/>
+            <text x="405" y="310" text-anchor="middle" class="label">ENROLL</text>
+            <g class="leader">
+              <line x1="200" y1="160" x2="200" y2="186"/>
+            </g>
+            <g class="pin"><circle cx="200" cy="192" r="9"/><text x="200" y="195" text-anchor="middle">A</text></g>
+            <g class="leader"><line x1="405" y1="306" x2="405" y2="284"/></g>
+            <g class="pin"><circle cx="405" cy="278" r="9"/><text x="405" y="281" text-anchor="middle">B</text></g>
+            <g class="leader"><line x1="420" y1="40" x2="420" y2="58"/></g>
+            <g class="pin"><circle cx="420" cy="64" r="9"/><text x="420" y="67" text-anchor="middle">C</text></g>
+          </svg>
+          <p class="project__caption">Concept wireframe — class schedule &amp; enrollment screen</p>
+          <ul class="legend-key mono">
+            <li><strong>A</strong> Schedule grid</li>
+            <li><strong>B</strong> Enrollment action</li>
+            <li><strong>C</strong> Admin controls</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="credentials">
+    <div class="sheet__inner sheet__inner--split">
+      <div class="edu-block reveal">
+        <span class="eyebrow">Sheet 05 / 06 — Credentials</span>
+        <h2>Education &amp; Certifications</h2>
+        <h3>Bachelor of Science in Computer Science</h3>
+        <p class="role-card__meta">Sacred Heart College, Tirupattur, Tamil Nadu · CGPA: 6.81/10</p>
+        <p>Core coursework: Data Structures, Web Development, Programming in C, Python Programming,
+          Operating Systems, Networking.</p>
+        <p>Completed academic projects involving website development and software design.</p>
+      </div>
+      <div class="reveal">
+        <p class="small-heading mono">Certifications</p>
+        <div class="pill-row">
+          <span class="pill">Machine Learning for Data Science</span>
+          <span class="pill">Mastering AI Tools</span>
+          <span class="pill">National Level Workshop on React JS</span>
+          <span class="pill">Data Science with Python</span>
+        </div>
+        <p class="small-heading mono">Languages</p>
+        <div class="pill-row">
+          <span class="pill">English</span>
+          <span class="pill">Tamil</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet sheet--alt sheet--contact" id="contact">
+    <div class="sheet__inner">
+      <span class="eyebrow">Sheet 06 / 06 — Contact</span>
+      <h2>Let's talk</h2>
+      <p class="lede">Open to UI/UX design opportunities — reach out and I'll get back to you.</p>
+      <div class="contact-grid">
+        <ul class="contact-list reveal">
+          <li><a href="mailto:naveendiva1410@gmail.com">naveendiva1410@gmail.com</a></li>
+          <li><a href="tel:+919345869848">+91 93458 69848</a></li>
+          <li>S. Kodiyur, Jolarpet, Tamil Nadu</li>
+        </ul>
+        <form class="contact-form reveal" id="contactForm">
+          <label>Name<input type="text" name="name" required></label>
+          <label>Email<input type="email" name="email" required></label>
+          <label>Message<textarea name="message" rows="4" required></textarea></label>
+          <button type="submit" class="btn btn--primary">Send Message</button>
+          <p class="form-note">Opens your email app with this message ready to send.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer mono">
+  <p>© 2026 Naveenkumar V — Built with HTML, CSS &amp; JavaScript.</p>
+</footer>
+
+<script>
+  // Theme toggle (Paper / Blueprint)
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeLabel = document.getElementById('themeLabel');
+  themeToggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'paper' ? 'blueprint' : 'paper';
+    root.setAttribute('data-theme', next);
+    themeToggle.setAttribute('aria-pressed', String(next === 'blueprint'));
+    themeLabel.textContent = next === 'paper' ? 'Paper' : 'Blueprint';
+  });
+
+  // Scroll-reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // Active nav link on scroll
+  const navLinks = document.querySelectorAll('.topbar__nav a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+  const setActive = () => {
+    let current = sections[0];
+    const pos = window.scrollY + 140;
+    sections.forEach(sec => { if (sec && sec.offsetTop <= pos) current = sec; });
+    navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + (current && current.id)));
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // Contact form -> mailto
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = data.get('name') || '';
+    const email = data.get('email') || '';
+    const message = data.get('message') || '';
+    const subject = encodeURIComponent('Portfolio enquiry from ' + name);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+    window.location.href = `mailto:naveendiva1410@gmail.com?subject=${subject}&body=${body}`;
+  });
+</script>
+</body>
+</html>
